@@ -16,7 +16,6 @@ final class LiveActivityManager {
     }
 
     func isTracking(entityID: String) -> Bool {
-        // Check all system activities (includes push-to-start ones not in our array)
         Activity<TimerActivityAttributes>.activities.contains {
             $0.attributes.entityID == entityID
             && ($0.activityState == .active || $0.activityState == .stale)
@@ -36,8 +35,6 @@ final class LiveActivityManager {
             throw LiveActivityError.noEndTime
         }
 
-        // Don't duplicate: check both our tracked list AND all system activities
-        // (push-to-start can create activities we don't track in our array yet)
         let allSystemActivities = Activity<TimerActivityAttributes>.activities
         if allSystemActivities.contains(where: {
             $0.attributes.entityID == entity.entityID
@@ -72,7 +69,6 @@ final class LiveActivityManager {
 
         activeActivities.append(activity)
 
-        // Register push token for background updates
         Task {
             for await tokenData in activity.pushTokenUpdates {
                 let token = tokenData.map { String(format: "%02x", $0) }.joined()
@@ -85,7 +81,6 @@ final class LiveActivityManager {
     }
 
     func updateActivity(for entityID: String, newState: HAEntity) {
-        // Also pick up push-started activities not yet in our local array
         refreshActivities()
 
         guard let activity = activeActivities.first(where: { $0.attributes.entityID == entityID })

@@ -78,7 +78,6 @@ struct SettingsView: View {
             token = settings.config.accessToken
         }
         .onDisappear {
-            // Clear token from view memory when sheet closes
             token = ""
         }
     }

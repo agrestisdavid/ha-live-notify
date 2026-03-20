@@ -55,7 +55,6 @@ private struct EntityRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            // Configurable icon with color
             ZStack {
                 Circle()
                     .fill(config.color.opacity(0.12))
@@ -82,7 +81,6 @@ private struct EntityRow: View {
                     .foregroundStyle(config.color)
             }
 
-            // Start Live Activity button
             if entity.state == "active" {
                 Button {
                     onStart()

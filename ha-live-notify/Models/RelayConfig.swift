@@ -1,8 +1,6 @@
 import Foundation
 import Security
 
-/// Stores Push Relay server configuration.
-/// URL is in UserDefaults; API key is in Keychain for security.
 enum RelayConfig {
     private static let urlKey = "relay_url"
     private static let keychainService = "ha-live-notify-relay"
@@ -26,8 +24,6 @@ enum RelayConfig {
         URL(string: url)
     }
 
-    /// #3: Validate relay URL - warn when using HTTP for non-private IPs.
-    /// Returns nil if URL is safe, or a warning string if insecure.
     static func validateURL(_ urlString: String) -> String? {
         guard let parsed = URL(string: urlString),
               let host = parsed.host?.lowercased(),
@@ -35,10 +31,8 @@ enum RelayConfig {
             return "Ungültige URL"
         }
 
-        // HTTPS is always fine
         if scheme == "https" { return nil }
 
-        // HTTP is only acceptable for private/local networks
         if scheme == "http" {
             if isPrivateHost(host) { return nil }
             return "Warnung: HTTP ist unsicher für öffentliche Adressen. Bitte HTTPS verwenden."
@@ -47,13 +41,11 @@ enum RelayConfig {
         return nil
     }
 
-    /// Check if a host is on a private/local network.
     private static func isPrivateHost(_ host: String) -> Bool {
         if host == "localhost" || host == "127.0.0.1" || host == "::1" { return true }
         if host.hasSuffix(".local") || host.hasSuffix(".home")
             || host.hasSuffix(".internal") || host.hasSuffix(".lan") { return true }
 
-        // Check RFC 1918 private IP ranges
         let parts = host.split(separator: ".").compactMap { UInt8($0) }
         guard parts.count == 4 else { return false }
         if parts[0] == 10 { return true }
@@ -67,8 +59,6 @@ enum RelayConfig {
         url = ""
         deleteKeyFromKeychain()
     }
-
-    // MARK: - Keychain
 
     private static func saveKeyToKeychain(_ key: String) {
         deleteKeyFromKeychain()

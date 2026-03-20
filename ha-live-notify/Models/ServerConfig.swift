@@ -46,15 +46,11 @@ struct ServerConfig: Equatable {
         return url
     }
 
-    /// Whether the connection uses encryption (wss/https)
     var isSecureConnection: Bool {
         let trimmed = baseURL.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         return trimmed.hasPrefix("https://") || trimmed.hasPrefix("wss://")
     }
 
-    /// Validates that the URL points to a plausible HA instance.
-    /// Plain HTTP is only allowed for local/private network addresses.
-    /// Public addresses require HTTPS/WSS.
     private func isAllowedHost(_ url: URL) -> Bool {
         guard let host = url.host?.lowercased() else { return false }
         let scheme = url.scheme?.lowercased() ?? ""
@@ -62,7 +58,6 @@ struct ServerConfig: Equatable {
         let isSecure = scheme == "https" || scheme == "wss"
         if isSecure { return true }
 
-        // Plain HTTP/WS only allowed for private networks
         let isLocal = host == "localhost"
             || host == "127.0.0.1"
             || host == "::1"
@@ -79,11 +74,10 @@ struct ServerConfig: Equatable {
         let parts = host.split(separator: ".").compactMap { UInt8($0) }
         guard parts.count == 4 else { return false }
 
-        // RFC 1918 private ranges
-        if parts[0] == 10 { return true }                                      // 10.0.0.0/8
-        if parts[0] == 172 && (16...31).contains(parts[1]) { return true }     // 172.16.0.0/12
-        if parts[0] == 192 && parts[1] == 168 { return true }                  // 192.168.0.0/16
-        if parts[0] == 169 && parts[1] == 254 { return true }                  // 169.254.0.0/16 (link-local)
+        if parts[0] == 10 { return true }
+        if parts[0] == 172 && (16...31).contains(parts[1]) { return true }
+        if parts[0] == 192 && parts[1] == 168 { return true }
+        if parts[0] == 169 && parts[1] == 254 { return true }
 
         return false
     }

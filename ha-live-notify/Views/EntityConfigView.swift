@@ -13,7 +13,6 @@ struct EntityConfigView: View {
     var body: some View {
         NavigationStack {
             Form {
-                // Preview
                 Section {
                     HStack(spacing: 16) {
                         ZStack {
@@ -40,7 +39,6 @@ struct EntityConfigView: View {
                     Text("Vorschau")
                 }
 
-                // Icon selection
                 Section {
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 5), spacing: 16) {
                         ForEach(EntityConfig.availableIcons, id: \.self) { icon in
@@ -67,7 +65,6 @@ struct EntityConfigView: View {
                     Text("Icon")
                 }
 
-                // Color selection
                 Section {
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4), spacing: 12) {
                         ForEach(EntityConfig.availableColors, id: \.hex) { color in
@@ -98,7 +95,6 @@ struct EntityConfigView: View {
                     Text("Farbe")
                 }
 
-                // Progress direction
                 Section {
                     Toggle(isOn: $config.invertProgress) {
                         VStack(alignment: .leading, spacing: 2) {

@@ -20,7 +20,6 @@ struct HAEntity: Identifiable, Codable, Hashable {
         (entityID.hasPrefix("sensor.") && attributes.deviceClass == "duration")
     }
 
-    /// Parses the HA timer's `finishes_at` or calculates from `duration` + `last_changed`
     var finishesAt: Date? {
         if let finishesAt = attributes.finishesAt {
             return ISO8601DateFormatter().date(from: finishesAt)

@@ -64,7 +64,7 @@ struct RelaySettingsView: View {
                 if let result = testResult {
                     Text(result)
                         .font(.caption)
-                        .foregroundStyle(result.contains("✅") ? .green : .red)
+                        .foregroundStyle(result.contains("\u{2705}") ? .green : .red)
                 }
             }
 
@@ -108,18 +108,17 @@ struct RelaySettingsView: View {
         let activeCount = allActivities.count
         let activityStates = allActivities.map { "\($0.attributes.entityID): \($0.activityState)" }
 
-        // Check per-activity push tokens
         var tokenInfo = "Keine"
         if let first = allActivities.first {
             tokenInfo = "\(first.attributes.entityID) hat Activity"
         }
 
         debugInfo = """
-        Live Activities erlaubt: \(authInfo.areActivitiesEnabled ? "✅" : "❌")
-        Frequent Push erlaubt: \(authInfo.frequentPushesEnabled ? "✅" : "❌")
-        Relay URL: \(RelayConfig.url.isEmpty ? "❌ leer" : RelayConfig.url)
-        API Key: \(hasKey ? "✅ Konfiguriert" : "❌ LEER - nicht in Keychain!")
-        Relay konfiguriert: \(configured ? "✅" : "❌")
+        Live Activities erlaubt: \(authInfo.areActivitiesEnabled ? "\u{2705}" : "\u{274C}")
+        Frequent Push erlaubt: \(authInfo.frequentPushesEnabled ? "\u{2705}" : "\u{274C}")
+        Relay URL: \(RelayConfig.url.isEmpty ? "\u{274C} leer" : RelayConfig.url)
+        API Key: \(hasKey ? "\u{2705} Konfiguriert" : "\u{274C} LEER - nicht in Keychain!")
+        Relay konfiguriert: \(configured ? "\u{2705}" : "\u{274C}")
         Entities: \(entities.count) - \(entities.joined(separator: ", "))
         System Activities: \(activeCount)
         \(activityStates.joined(separator: "\n"))
@@ -130,19 +129,16 @@ struct RelaySettingsView: View {
     private func save() {
         let trimmedURL = relayURL.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        // #3: Validate relay URL before saving
         if let warning = RelayConfig.validateURL(trimmedURL) {
-            testResult = "⚠️ \(warning)"
-            // Still save but show warning
+            testResult = "\u{26A0}\u{FE0F} \(warning)"
         }
 
         RelayConfig.url = trimmedURL
         RelayConfig.apiKey = apiKey.trimmingCharacters(in: .whitespacesAndNewlines)
-        if testResult == nil || testResult?.contains("⚠️") == false {
-            testResult = "✅ Gespeichert"
+        if testResult == nil || testResult?.contains("\u{26A0}\u{FE0F}") == false {
+            testResult = "\u{2705} Gespeichert"
         }
 
-        // Register push-to-start token now that relay is configured
         Task {
             await PushTokenManager.shared.registerPushToStartToken()
         }
@@ -154,7 +150,7 @@ struct RelaySettingsView: View {
 
         let urlString = relayURL.trimmingCharacters(in: .whitespacesAndNewlines)
         guard let url = URL(string: "\(urlString)/health") else {
-            testResult = "❌ Ungültige URL"
+            testResult = "\u{274C} Ungültige URL"
             isTesting = false
             return
         }
@@ -166,12 +162,12 @@ struct RelaySettingsView: View {
                    let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
                    let status = json["status"] as? String, status == "ok"
                 {
-                     testResult = "✅ Verbunden"
+                     testResult = "\u{2705} Verbunden"
                 } else {
-                    testResult = "❌ Server antwortet nicht korrekt"
+                    testResult = "\u{274C} Server antwortet nicht korrekt"
                 }
             } catch {
-                testResult = "❌ \(error.localizedDescription)"
+                testResult = "\u{274C} \(error.localizedDescription)"
             }
             isTesting = false
         }

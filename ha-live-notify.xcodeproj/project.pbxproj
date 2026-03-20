@@ -232,7 +232,7 @@
 				CODE_SIGN_ENTITLEMENTS = "ha-live-notify-widgets/ha-live-notify-widgets.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = SEGKL2526Z;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "ha-live-notify-widgetsInfo.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "ha-live-notify-widgets";
@@ -262,7 +262,7 @@
 				CODE_SIGN_ENTITLEMENTS = "ha-live-notify-widgets/ha-live-notify-widgets.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = SEGKL2526Z;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "ha-live-notify-widgetsInfo.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "ha-live-notify-widgets";
@@ -408,7 +408,7 @@
 				CODE_SIGN_ENTITLEMENTS = "ha-live-notify/ha-live-notify.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = SEGKL2526Z;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
@@ -453,7 +453,7 @@
 				CODE_SIGN_ENTITLEMENTS = "ha-live-notify/ha-live-notify.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = SEGKL2526Z;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;

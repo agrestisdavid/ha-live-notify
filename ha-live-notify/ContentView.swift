@@ -46,7 +46,6 @@ struct ContentView: View {
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
             websocket.handleAppDidBecomeActive()
             websocket.refresh()
-            // Re-register push token on every foreground
             Task {
                 await PushTokenManager.shared.reRegisterIfNeeded()
             }
@@ -198,11 +197,8 @@ struct ContentView: View {
 
     private func setupEntityChangeHandler() {
         websocket.onEntityStateChanged = { entity in
-            // Update existing activity
             activityManager.updateActivity(for: entity.entityID, newState: entity)
 
-            // Auto-start: if a selected timer becomes active and isn't tracked yet
-            // Skip if relay is configured - push-to-start will handle it
             if entity.isTimer
                 && entity.state == "active"
                 && EntitySelection.isSelected(entity.entityID)

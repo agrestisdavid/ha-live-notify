@@ -1,7 +1,6 @@
 import Foundation
 import SwiftUI
 
-/// Per-entity customization (icon, color) persisted in App Group UserDefaults
 struct EntityConfig: Codable, Equatable {
     var iconName: String
     var colorHex: String
@@ -32,7 +31,6 @@ struct EntityConfig: Codable, Equatable {
     ]
 }
 
-/// Manages per-entity configuration stored in App Group UserDefaults
 final class EntityConfigStore {
     private static let key = "entity_configs"
     private static var defaults: UserDefaults {
@@ -62,8 +60,6 @@ final class EntityConfigStore {
         defaults.set(data, forKey: key)
     }
 }
-
-// MARK: - Color hex extension
 
 extension Color {
     init?(hex: String) {

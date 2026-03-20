@@ -1,7 +1,5 @@
 import Foundation
 
-/// Stores which entity IDs the user has selected for Live Activity tracking.
-/// Persisted in App Group UserDefaults so the widget can also access it.
 final class EntitySelection {
     private static let key = "selected_entity_ids"
     private static var defaults: UserDefaults {
@@ -26,7 +24,6 @@ final class EntitySelection {
         }
         defaults.set(Array(ids), forKey: key)
 
-        // Re-register with relay so it knows the updated entity list
         Task {
             await PushTokenManager.shared.reRegisterIfNeeded()
         }

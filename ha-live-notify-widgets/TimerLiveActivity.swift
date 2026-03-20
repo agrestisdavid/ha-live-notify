@@ -38,8 +38,6 @@ struct TimerLiveActivity: Widget {
         }
     }
 
-    // MARK: - Helpers
-
     private func accentColor(_ context: ActivityViewContext<TimerActivityAttributes>) -> Color {
         Color(hex: context.attributes.accentColorHex) ?? .orange
     }
@@ -52,14 +50,11 @@ struct TimerLiveActivity: Widget {
         }
     }
 
-    // MARK: - Lock Screen
-
     @ViewBuilder
     private func lockScreenView(context: ActivityViewContext<TimerActivityAttributes>) -> some View {
         let accent = accentColor(context)
 
         HStack(spacing: 12) {
-            // Icon
             ZStack {
                 Circle()
                     .fill(accent.opacity(0.15))
@@ -70,7 +65,6 @@ struct TimerLiveActivity: Widget {
             }
             .frame(width: 50)
 
-            // Name + Timer on top, Bar below
             VStack(spacing: 6) {
                 HStack {
                     Text(context.attributes.deviceName)
@@ -89,8 +83,6 @@ struct TimerLiveActivity: Widget {
         .activitySystemActionForegroundColor(.white)
     }
 
-    // MARK: - Progress Bar (all states)
-
     private let barHeight: CGFloat = 4
 
     @ViewBuilder
@@ -100,14 +92,9 @@ struct TimerLiveActivity: Widget {
 
         switch context.state.state {
         case .active:
-            // ProgressView(timerInterval:) is the ONLY way to animate in Live Activities.
-            // It counts down from 1.0 to 0.0 over the interval.
-            // startTime = endTime - totalDuration gives us the original start.
             let startTime = context.state.endTime.addingTimeInterval(-context.state.totalDuration)
 
             if invert {
-                // Inverted: bar fills from left to right (empty→full)
-                // Default ProgressView goes full→empty, so invert = default behavior
                 ProgressView(
                     timerInterval: startTime...context.state.endTime,
                     countsDown: true,
@@ -119,8 +106,6 @@ struct TimerLiveActivity: Widget {
                 .frame(height: barHeight)
                 .scaleEffect(x: 1, y: 0.6)
             } else {
-                // Normal: bar empties from right to left (full→empty)
-                // Default ProgressView goes full→empty, which is "normal"
                 ProgressView(
                     timerInterval: startTime...context.state.endTime,
                     countsDown: false,
@@ -160,8 +145,6 @@ struct TimerLiveActivity: Widget {
         }
     }
 
-    // MARK: - Timer Display
-
     @ViewBuilder
     private func timerDisplay(context: ActivityViewContext<TimerActivityAttributes>) -> some View {
         let accent = accentColor(context)
@@ -169,7 +152,6 @@ struct TimerLiveActivity: Widget {
         Group {
             switch context.state.state {
             case .active:
-                // Only show countdown if endTime is in the future, otherwise show "Fertig"
                 if context.state.endTime > Date() {
                     Text(context.state.endTime, style: .timer)
                         .font(.title2.monospacedDigit().bold())
@@ -192,8 +174,6 @@ struct TimerLiveActivity: Widget {
         .multilineTextAlignment(.trailing)
         .frame(height: 32)
     }
-
-    // MARK: - Dynamic Island Compact
 
     @ViewBuilder
     private func compactTrailingView(context: ActivityViewContext<TimerActivityAttributes>) -> some View {
@@ -218,8 +198,6 @@ struct TimerLiveActivity: Widget {
         }
     }
 }
-
-// MARK: - Color hex (duplicated for widget target)
 
 extension Color {
     init?(hex: String) {
