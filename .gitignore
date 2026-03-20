@@ -6,6 +6,9 @@ xcuserdata/
 DerivedData/
 build/
 
+# Local config (contains Team ID)
+Local.xcconfig
+
 # Secrets - NEVER commit these
 *.p8
 *.pem
