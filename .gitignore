@@ -1,0 +1,30 @@
+# Xcode
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+DerivedData/
+build/
+
+# Secrets - NEVER commit these
+*.p8
+*.pem
+*.key
+.env
+api_key.txt
+devices.json
+
+# macOS
+.DS_Store
+*.swp
+*~
+
+# Swift Package Manager
+.build/
+Packages/
+Package.resolved
+
+# Temporary files
+*.svg
+icon_dark.svg
+icon_tinted.svg
