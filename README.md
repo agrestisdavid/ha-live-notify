@@ -1,119 +1,119 @@
 # HA Live Notify
 
-Live Activities für Home Assistant auf dem iPhone – selbst gehostet, kein Cloud-Dienst nötig.
+Live Activities for Home Assistant on iPhone – self-hosted, no cloud service required.
 
 ## Features
 
-- Timer-Entities als Live Activities auf Lock Screen & Dynamic Island
-- Push-Benachrichtigungen auch wenn die App geschlossen ist
-- Anpassbare Icons und Farben pro Timer
-- Fortschrittsbalken mit Echtzeit-Animation
-- Komplett self-hosted über HA Add-on
+- Timer entities as Live Activities on Lock Screen & Dynamic Island
+- Push notifications even when the app is closed
+- Customizable icons and colors per timer
+- Real-time animated progress bar
+- Fully self-hosted via HA Add-on
 
-## Voraussetzungen
+## Requirements
 
-- iPhone mit iOS 18+
-- Home Assistant Installation (mit Supervisor/Add-on Support)
-- Apple Developer Account (kostenlos oder $99/Jahr)
-- Mac mit Xcode 26+
+- iPhone with iOS 18+
+- Home Assistant installation (with Supervisor/Add-on support)
+- Apple Developer Account (free or $99/year)
+- Mac with Xcode 26+
 
-## Setup-Anleitung
+## Setup Guide
 
 ### 1. Apple Developer Account
 
-1. Gehe zu [developer.apple.com](https://developer.apple.com) und melde dich an
-2. Erstelle einen Account falls noch nicht vorhanden
-3. Akzeptiere die Apple Developer License Agreement
-4. Notiere dir deine **Team ID** (unter Account → Membership)
+1. Go to [developer.apple.com](https://developer.apple.com) and sign in
+2. Create an account if you don't have one yet
+3. Accept the Apple Developer License Agreement
+4. Note your **Team ID** (under Account → Membership)
 
-### 2. APNs Key erstellen
+### 2. Create APNs Key
 
-1. Gehe zu [developer.apple.com/account/resources/authkeys](https://developer.apple.com/account/resources/authkeys/list)
-2. Klicke auf das **+** Symbol um einen neuen Key zu erstellen
-3. Gib einen Namen ein (z.B. "HA Live Notify")
-4. Aktiviere **Apple Push Notifications service (APNs)**
-5. Klicke auf **Continue** und dann **Register**
-6. **Lade die .p8 Datei herunter** (dies ist nur einmal möglich!)
-7. Notiere dir die **Key ID** (10-stellige ID, z.B. `ABC1234DEF`)
+1. Go to [developer.apple.com/account/resources/authkeys](https://developer.apple.com/account/resources/authkeys/list)
+2. Click the **+** icon to create a new key
+3. Enter a name (e.g. "HA Live Notify")
+4. Enable **Apple Push Notifications service (APNs)**
+5. Click **Continue** then **Register**
+6. **Download the .p8 file** (this can only be done once!)
+7. Note the **Key ID** (10-character ID, e.g. `ABC1234DEF`)
 
-### 3. HA Add-on installieren
+### 3. Install HA Add-on
 
-1. Öffne Home Assistant → **Settings** → **Add-ons** → **Add-on Store**
-2. Klicke auf **⋮** (drei Punkte oben rechts) → **Repositories**
-3. Füge hinzu: `https://github.com/agrestisdavid/ha-live-notify-addon`
-4. Suche nach **"HA Live Notify Relay"** und installiere es
-5. Gehe in die **Konfiguration** des Add-ons und trage ein:
-   - `apns_key_id`: Deine Key ID aus Schritt 2
-   - `apns_team_id`: Deine Team ID aus Schritt 1
-   - `apns_bundle_id`: `ios.ha-live-notify` (Standard)
-   - `apns_use_sandbox`: `true` (für Entwicklung, `false` für Production-Builds)
-6. Starte das Add-on
+1. Open Home Assistant → **Settings** → **Add-ons** → **Add-on Store**
+2. Click **⋮** (three dots top right) → **Repositories**
+3. Add: `https://github.com/agrestisdavid/ha-live-notify-addon`
+4. Search for **"HA Live Notify Relay"** and install it
+5. Go to the add-on **Configuration** and enter:
+   - `apns_key_id`: Your Key ID from step 2
+   - `apns_team_id`: Your Team ID from step 1
+   - `apns_bundle_id`: `ios.ha-live-notify` (default)
+   - `apns_use_sandbox`: `true` (for development, `false` for production builds)
+6. Start the add-on
 
-### 4. AuthKey.p8 hochladen
+### 4. Upload AuthKey.p8
 
-Die APNs Key-Datei muss in den Add-on Konfigurationsordner kopiert werden:
+The APNs key file must be copied to the add-on config directory:
 
 **Option A: Via Samba/SMB Share**
-1. Installiere das "Samba share" Add-on falls nicht vorhanden
-2. Verbinde dich mit dem Share
-3. Kopiere `AuthKey.p8` nach `addon_configs/ha-live-notify-relay/AuthKey.p8`
+1. Install the "Samba share" add-on if not already present
+2. Connect to the share
+3. Copy `AuthKey.p8` to `addon_configs/ha-live-notify-relay/AuthKey.p8`
 
 **Option B: Via SSH**
-1. Verbinde dich per SSH mit deinem HA Host
-2. Kopiere die Datei:
+1. Connect to your HA host via SSH
+2. Copy the file:
    ```bash
    cp AuthKey.p8 /addon_configs/ha-live-notify-relay/AuthKey.p8
    ```
 
-3. Starte das Add-on neu
+3. Restart the add-on
 
-### 5. App bauen und installieren
+### 5. Build and Install the App
 
-1. Klone dieses Repository:
+1. Clone this repository:
    ```bash
    git clone https://github.com/agrestisdavid/ha-live-notify.git
    ```
-2. Öffne `ha-live-notify.xcodeproj` in Xcode
-3. Wähle dein Apple Developer Team unter **Signing & Capabilities** für **beide Targets**:
-   - `ha-live-notify` (die App)
-   - `ha-live-notify-widgets` (die Widget Extension)
-4. Verbinde dein iPhone per USB oder WLAN
-5. Wähle dein iPhone als Build-Ziel
-6. Klicke auf **Run** (oder Cmd+R)
+2. Open `ha-live-notify.xcodeproj` in Xcode
+3. Select your Apple Developer Team under **Signing & Capabilities** for **both targets**:
+   - `ha-live-notify` (the app)
+   - `ha-live-notify-widgets` (the widget extension)
+4. Connect your iPhone via USB or Wi-Fi
+5. Select your iPhone as the build target
+6. Click **Run** (or Cmd+R)
 
-### 6. App konfigurieren
+### 6. Configure the App
 
-1. **Home Assistant Verbindung:**
-   - Öffne die App → Tippe auf "Verbinden"
-   - Gib deine Home Assistant URL ein (z.B. `http://homeassistant.local:8123`)
-   - Erstelle einen Long-Lived Access Token in HA: **Profil** → **Sicherheit** → **Long-Lived Access Tokens** → **Token erstellen**
-   - Füge den Token in die App ein
+1. **Home Assistant Connection:**
+   - Open the app → Tap "Connect"
+   - Enter your Home Assistant URL (e.g. `http://homeassistant.local:8123`)
+   - Create a Long-Lived Access Token in HA: **Profile** → **Security** → **Long-Lived Access Tokens** → **Create Token**
+   - Paste the token into the app
 
-2. **Push Relay Verbindung:**
-   - Gehe zu **Einstellungen** → **Push Relay**
-   - Gib die Relay URL ein (z.B. `http://homeassistant.local:8765`)
-   - Den **API Key** findest du in den Add-on Logs (oder in der Datei `/addon_configs/ha-live-notify-relay/api_key.txt`)
-   - Teste die Verbindung mit dem "Verbindung testen" Button
+2. **Push Relay Connection:**
+   - Go to **Settings** → **Push Relay**
+   - Enter the Relay URL (e.g. `http://homeassistant.local:8765`)
+   - Find the **API Key** in the add-on logs (or in `/addon_configs/ha-live-notify-relay/api_key.txt`)
+   - Test the connection with the "Test Connection" button
 
-3. **Entities auswählen:**
-   - Gehe zu **Einstellungen** → **Entities**
-   - Wähle die Timer-Entities aus, die als Live Activities angezeigt werden sollen
+3. **Select Entities:**
+   - Go to **Settings** → **Entities**
+   - Select the timer entities you want to display as Live Activities
 
-### 7. HA Automation erstellen
+### 7. Create HA Automation
 
-Timer-Entities müssen in Home Assistant erstellt und von anderen Automations gestartet werden. Das Add-on selbst empfängt Updates über einen REST-Endpunkt.
+Timer entities need to be created in Home Assistant and started by automations. The add-on receives updates via a REST endpoint.
 
-Erstelle eine Automation, die bei Timer-Änderungen das Relay benachrichtigt:
+Create an automation that notifies the relay on timer changes:
 
 ```yaml
 alias: Live Notify - Timer Update
-description: Sendet Timer-Updates an das Push Relay
+description: Sends timer updates to the push relay
 triggers:
   - trigger: state
     entity_id:
-      - timer.waschmaschine
-      - timer.trockner
-      - timer.spuelmaschine
+      - timer.washing_machine
+      - timer.dryer
+      - timer.dishwasher
 conditions: []
 actions:
   - action: rest_command.live_notify_update
@@ -127,9 +127,9 @@ mode: parallel
 max: 10
 ```
 
-### 8. rest_command einrichten
+### 8. Set Up rest_command
 
-Füge folgenden Block in deine `configuration.yaml` ein:
+Add the following to your `configuration.yaml`:
 
 ```yaml
 rest_command:
@@ -137,7 +137,7 @@ rest_command:
     url: "http://localhost:8765/update"
     method: POST
     headers:
-      Authorization: "Bearer DEIN_API_KEY"
+      Authorization: "Bearer YOUR_API_KEY"
       Content-Type: "application/json"
     payload: >
       {
@@ -150,11 +150,11 @@ rest_command:
     content_type: "application/json"
 ```
 
-Ersetze `DEIN_API_KEY` mit dem API Key aus den Add-on Logs.
+Replace `YOUR_API_KEY` with the API key from the add-on logs.
 
-Lade danach die Konfiguration neu: **Developer Tools** → **YAML** → **REST Commands**.
+Then reload the configuration: **Developer Tools** → **YAML** → **REST Commands**.
 
-## Architektur
+## Architecture
 
 ```
 HA Timer Entity
@@ -175,6 +175,6 @@ Apple Push Notification service (APNs)
 iPhone → Live Activity (Lock Screen + Dynamic Island)
 ```
 
-## Lizenz
+## License
 
 MIT
