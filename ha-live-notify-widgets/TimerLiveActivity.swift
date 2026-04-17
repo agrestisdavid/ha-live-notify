@@ -94,29 +94,16 @@ struct TimerLiveActivity: Widget {
         case .active:
             let startTime = context.state.endTime.addingTimeInterval(-context.state.totalDuration)
 
-            if invert {
-                ProgressView(
-                    timerInterval: startTime...context.state.endTime,
-                    countsDown: true,
-                    label: { EmptyView() },
-                    currentValueLabel: { EmptyView() }
-                )
-                .progressViewStyle(.linear)
-                .tint(accent)
-                .frame(height: barHeight)
-                .scaleEffect(x: 1, y: 0.6)
-            } else {
-                ProgressView(
-                    timerInterval: startTime...context.state.endTime,
-                    countsDown: false,
-                    label: { EmptyView() },
-                    currentValueLabel: { EmptyView() }
-                )
-                .progressViewStyle(.linear)
-                .tint(accent)
-                .frame(height: barHeight)
-                .scaleEffect(x: 1, y: 0.6)
-            }
+            ProgressView(
+                timerInterval: startTime...context.state.endTime,
+                countsDown: invert,
+                label: { EmptyView() },
+                currentValueLabel: { EmptyView() }
+            )
+            .progressViewStyle(.linear)
+            .tint(accent)
+            .frame(height: barHeight)
+            .scaleEffect(x: 1, y: 0.6)
 
         case .paused:
             GeometryReader { geo in
@@ -152,15 +139,15 @@ struct TimerLiveActivity: Widget {
         Group {
             switch context.state.state {
             case .active:
-                if context.state.endTime > Date() {
-                    Text(context.state.endTime, style: .timer)
-                        .font(.title2.monospacedDigit().bold())
-                        .foregroundStyle(accent)
-                } else {
-                    Text("Fertig")
-                        .font(.subheadline.bold())
-                        .foregroundStyle(.green)
-                }
+                let startTime = context.state.endTime.addingTimeInterval(-context.state.totalDuration)
+                Text(
+                    timerInterval: startTime...context.state.endTime,
+                    pauseTime: context.state.endTime,
+                    countsDown: true,
+                    showsHours: true
+                )
+                .font(.title2.monospacedDigit().bold())
+                .foregroundStyle(accent)
             case .paused:
                 Text("Pausiert")
                     .font(.subheadline.bold())
@@ -179,15 +166,16 @@ struct TimerLiveActivity: Widget {
     private func compactTrailingView(context: ActivityViewContext<TimerActivityAttributes>) -> some View {
         switch context.state.state {
         case .active:
-            if context.state.endTime > Date() {
-                Text(context.state.endTime, style: .timer)
-                    .monospacedDigit()
-                    .font(.caption)
-                    .frame(minWidth: 40)
-            } else {
-                Image(systemName: "checkmark")
-                    .foregroundStyle(.green)
-            }
+            let startTime = context.state.endTime.addingTimeInterval(-context.state.totalDuration)
+            Text(
+                timerInterval: startTime...context.state.endTime,
+                pauseTime: context.state.endTime,
+                countsDown: true,
+                showsHours: false
+            )
+            .monospacedDigit()
+            .font(.caption)
+            .frame(minWidth: 40)
         case .paused:
             Text("II")
                 .font(.caption.bold())
