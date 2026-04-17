@@ -139,15 +139,17 @@ struct TimerLiveActivity: Widget {
         Group {
             switch context.state.state {
             case .active:
-                let startTime = context.state.endTime.addingTimeInterval(-context.state.totalDuration)
-                Text(
-                    timerInterval: startTime...context.state.endTime,
-                    pauseTime: context.state.endTime,
-                    countsDown: true,
-                    showsHours: true
-                )
-                .font(.title2.monospacedDigit().bold())
-                .foregroundStyle(accent)
+                TimelineView(.explicit([context.state.endTime])) { timeline in
+                    if timeline.date < context.state.endTime {
+                        Text(context.state.endTime, style: .timer)
+                            .font(.title2.monospacedDigit().bold())
+                            .foregroundStyle(accent)
+                    } else {
+                        Text("0:00")
+                            .font(.title2.monospacedDigit().bold())
+                            .foregroundStyle(accent)
+                    }
+                }
             case .paused:
                 Text("Pausiert")
                     .font(.subheadline.bold())
@@ -166,16 +168,19 @@ struct TimerLiveActivity: Widget {
     private func compactTrailingView(context: ActivityViewContext<TimerActivityAttributes>) -> some View {
         switch context.state.state {
         case .active:
-            let startTime = context.state.endTime.addingTimeInterval(-context.state.totalDuration)
-            Text(
-                timerInterval: startTime...context.state.endTime,
-                pauseTime: context.state.endTime,
-                countsDown: true,
-                showsHours: false
-            )
-            .monospacedDigit()
-            .font(.caption)
-            .frame(minWidth: 40)
+            TimelineView(.explicit([context.state.endTime])) { timeline in
+                if timeline.date < context.state.endTime {
+                    Text(context.state.endTime, style: .timer)
+                        .monospacedDigit()
+                        .font(.caption)
+                        .frame(minWidth: 40)
+                } else {
+                    Text("0:00")
+                        .monospacedDigit()
+                        .font(.caption)
+                        .frame(minWidth: 40)
+                }
+            }
         case .paused:
             Text("II")
                 .font(.caption.bold())
